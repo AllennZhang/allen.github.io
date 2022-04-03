@@ -1,0 +1,1603 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Android简单数据存储方式浅析, Hello">
+    <meta name="description" content="前言android开发中，对于简单数据(int,float,boolean,String)键值对的存储，相信大家对于SharedPreferences一定不陌生，是Android官方提供的一个基础组件，使用简单方便，但是也有一些缺陷，如主线">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    
+
+    <title>Android简单数据存储方式浅析 | Hello</title>
+    <link rel="icon" type="image/png" href="/blogs/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/blogs/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/blogs/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/blogs/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/blogs/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/blogs/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/blogs/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/blogs/css/my.css">
+
+    <script src="/blogs/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/blogs/atom.xml" title="Hello" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/blogs/" class="waves-effect waves-light">
+                    
+                    <img src="/blogs/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Hello</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/blogs/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/blogs/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/blogs/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/blogs/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/blogs/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/blogs/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/blogs/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/blogs/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Hello</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/blogs/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/blogs/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/blogs/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/blogs/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/blogs/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/blogs/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/blogs/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/blogs/medias/featureimages/11.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Android简单数据存储方式浅析</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/blogs/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/blogs/tags/Android/">
+                                <span class="chip bg-color">Android</span>
+                            </a>
+                        
+                            <a href="/blogs/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">
+                                <span class="chip bg-color">数据存储</span>
+                            </a>
+                        
+                            <a href="/blogs/tags/SharedPreferences/">
+                                <span class="chip bg-color">SharedPreferences</span>
+                            </a>
+                        
+                            <a href="/blogs/tags/DataStore/">
+                                <span class="chip bg-color">DataStore</span>
+                            </a>
+                        
+                            <a href="/blogs/tags/MMKV/">
+                                <span class="chip bg-color">MMKV</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/blogs/categories/Android/" class="post-category">
+                                Android
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-12-01
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/blogs/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>android开发中，对于简单数据(int,float,boolean,String)键值对的存储，相信大家对于SharedPreferences一定不陌生，是Android官方提供的一个基础组件，使用简单方便，但是也有一些缺陷，如主线程阻塞ANR，<br>不能保证类型安全，加载的数据会保留在内存造成内存浪费。针对此优化，最新的JetPack组件库中提供了DataStore组件来避免这些问题，并提供了SharedPreferences迁移的可能性。当然除此之外，腾讯也提供了一款<br>比较优秀的数据存储组件MMKV,开发者也可以从SharedPreferences迁移到MMKV。</p>
+<p>SharedPreferences DataStore MMKV对比：<img src="/blogs/images/mmkv_sp_data_store.jpg" class="[图一]" title="[图一]"> </p>
+<p>SharedPreferences DataStore 差异：<img src="/blogs/images/sp_vs_data_store.png" class="[图二]" title="[图二]"> </p>
+<h3 id="SharedPreferences"><a href="#SharedPreferences" class="headerlink" title="SharedPreferences"></a>SharedPreferences</h3><ul>
+<li>SharedPreferences是一种轻量级的数据存储方式，采用键值对的存储方式。</li>
+<li>SharedPreferences只能存储少量数据，大量数据不能使用该方式存储，支持存储的数据类型有boolean, float, int, long,  String。</li>
+<li>SharedPreferences存储到一个XML文件中的，路径在&#x2F;data&#x2F;data&#x2F;<packagename>&#x2F;shared_prefs&#x2F;下</li>
+</ul>
+<h4 id="1-基本用法"><a href="#1-基本用法" class="headerlink" title="1. 基本用法"></a>1. 基本用法</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">&#123;</span>
+    
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">readUserInfo</span><span class="token punctuation">(</span><span class="token class-name">Context</span> context<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 获取sp对象</span>
+        <span class="token class-name">SharedPreferences</span> sp <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">getSharedPreferences</span><span class="token punctuation">(</span><span class="token string">"user_info"</span><span class="token punctuation">,</span><span class="token class-name">Context</span><span class="token punctuation">.</span>MODE_PRIVATE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 获取键值对</span>
+        <span class="token class-name">String</span> userName <span class="token operator">=</span> sp<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"userName"</span><span class="token punctuation">,</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> userAge <span class="token operator">=</span> sp<span class="token punctuation">.</span><span class="token function">getInt</span><span class="token punctuation">(</span><span class="token string">"userAge"</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Float</span> userHeight <span class="token operator">=</span> sp<span class="token punctuation">.</span><span class="token function">getFloat</span><span class="token punctuation">(</span><span class="token string">"userHeight"</span><span class="token punctuation">,</span><span class="token number">0F</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span>  single <span class="token operator">=</span> sp<span class="token punctuation">.</span><span class="token function">getBoolean</span><span class="token punctuation">(</span><span class="token string">"single"</span><span class="token punctuation">,</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">updateUserInfo</span><span class="token punctuation">(</span><span class="token class-name">Context</span> context<span class="token punctuation">,</span><span class="token class-name">String</span> key<span class="token punctuation">,</span><span class="token class-name">Object</span> value<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+         <span class="token comment">// 获取sp对象</span>
+         <span class="token class-name">SharedPreferences</span> sp <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">getSharedPreferences</span><span class="token punctuation">(</span><span class="token string">"user_info"</span><span class="token punctuation">,</span><span class="token class-name">Context</span><span class="token punctuation">.</span>MODE_PRIVATE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token comment">//更新数据</span>
+         <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+             sp<span class="token punctuation">.</span><span class="token function">edit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">putString</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span> value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">&#125;</span><span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token keyword">instanceof</span> <span class="token class-name">Integer</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+             sp<span class="token punctuation">.</span><span class="token function">edit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">putInt</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token punctuation">)</span> value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">&#125;</span><span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token keyword">instanceof</span> <span class="token class-name">Float</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+             sp<span class="token punctuation">.</span><span class="token function">edit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">putFloat</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">Float</span><span class="token punctuation">)</span> value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">&#125;</span><span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token keyword">instanceof</span> <span class="token class-name">Boolean</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+             sp<span class="token punctuation">.</span><span class="token function">edit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">putBoolean</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">Boolean</span><span class="token punctuation">)</span> value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">&#125;</span>
+     <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+  
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="2-重识SharedPreferences"><a href="#2-重识SharedPreferences" class="headerlink" title="2. 重识SharedPreferences"></a>2. 重识SharedPreferences</h4><ul>
+<li>通过 getXXX() 方法获取数据，可能会导致主线程阻塞</li>
+<li>SharedPreference 不能保证类型安全</li>
+<li>SharedPreference 加载的数据会一直留在内存中，浪费内存</li>
+<li>apply() 方法虽然是异步的，可能会发生 ANR，在 8.0 之前和 8.0 之后实现各不相同</li>
+<li>apply() 方法无法获取到操作成功或者失败的结果</li>
+</ul>
+<p>getXXX() 方法可能会导致主线程阻塞</p>
+<blockquote>
+<p>调用 getSharedPreferences() 方法，最终会调用  SharedPreferencesImpl#startLoadFromDisk() 方法开启一个线程异步读取数据</p>
+</blockquote>
+<blockquote>
+<p> frameworks&#x2F;base&#x2F;core&#x2F;java&#x2F;android&#x2F;app&#x2F;SharedPreferencesImpl.java</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">SharedPreferencesImpl</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Object</span> mLock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">boolean</span> mLoaded <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">startLoadFromDisk</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mLock<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            mLoaded <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token string">"SharedPreferencesImpl-load"</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token function">loadFromDisk</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getString</span><span class="token punctuation">(</span><span class="token class-name">String</span> key<span class="token punctuation">,</span> <span class="token annotation punctuation">@Nullable</span> <span class="token class-name">String</span> defValue<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mLock<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">awaitLoadedLocked</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">String</span> v <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span>mMap<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> v <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">?</span> v <span class="token operator">:</span> defValue<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">awaitLoadedLocked</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>mLoaded<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                mLock<span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> unused<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">&#125;</span>
+
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>正如你所看到的，开启一个线程异步读取数据，当我们正在读取一个比较大的数据，还没读取完，接着调用 getXXX() 方法。<br>在同步方法内调用了 wait() 方法，会一直等待 getSharedPreferences() 方法开启的线程读取完数据才能继续往下执行，如果读取几 KB 的数据还好，假设读取一个大的文件，势必会造成主线程阻塞。</p>
+</blockquote>
+<p>SP 不能保证类型安全</p>
+<blockquote>
+<p>调用 getXXX() 方法的时候，可能会出现 ClassCastException 异常，因为使用相同的 key 进行操作的时候，putXXX 方法可以使用不同类型的数据覆盖掉相同的 key。</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">checkTypeSafe</span><span class="token punctuation">(</span><span class="token class-name">Context</span> context<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> key <span class="token operator">=</span> <span class="token string">"userAge"</span><span class="token punctuation">;</span>
+        <span class="token class-name">SharedPreferences</span> sp <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">getSharedPreferences</span><span class="token punctuation">(</span><span class="token string">"user_info"</span><span class="token punctuation">,</span> <span class="token class-name">Context</span><span class="token punctuation">.</span>MODE_PRIVATE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sp<span class="token punctuation">.</span><span class="token function">edit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">putInt</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 使用 Int 类型的数据覆盖相同的 key</span>
+        sp<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 使用相同的 key 读取 Sting 类型的数据</span>
+    <span class="token punctuation">&#125;</span>
+    
+    <span class="token comment">// throw Exception</span>
+    <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span></span>ClassCastException</span><span class="token operator">:</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span></span>Integer</span> cannot be cast <span class="token keyword">to</span> <span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span></span><span class="token class-name">String</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>SP 加载的数据会一直留在内存中</p>
+<blockquote>
+<p>通过 getSharedPreferences() 方法加载的数据，最后会将数据存储在静态的成员变量中。<br>通过静态的 ArrayMap 缓存每一个 SP 文件，而每个 SP 文件内容通过 Map 缓存键值对数据，这样数据会一直留在内存中，浪费内存。</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 调用 getSharedPreferences 方法，最后会调用 getSharedPreferencesCacheLocked 方法</span>
+ <span class="token keyword">public</span> <span class="token class-name">SharedPreferences</span> <span class="token function">getSharedPreferences</span><span class="token punctuation">(</span><span class="token class-name">File</span> file<span class="token punctuation">,</span> <span class="token keyword">int</span> mode<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+ <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+     <span class="token keyword">final</span> <span class="token class-name">ArrayMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">File</span><span class="token punctuation">,</span> <span class="token class-name">SharedPreferencesImpl</span><span class="token punctuation">></span></span> cache <span class="token operator">=</span> <span class="token function">getSharedPreferencesCacheLocked</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">return</span> sp<span class="token punctuation">;</span>
+ <span class="token punctuation">&#125;</span>
+
+ <span class="token comment">// 通过静态的 ArrayMap 缓存 SP 加载的数据</span>
+ <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token class-name">ArrayMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">ArrayMap</span><span class="token punctuation">&lt;</span><span class="token class-name">File</span><span class="token punctuation">,</span> <span class="token class-name">SharedPreferencesImpl</span><span class="token punctuation">></span><span class="token punctuation">></span></span> sSharedPrefsCache<span class="token punctuation">;</span>
+
+ <span class="token comment">// 将数据保存在 sSharedPrefsCache 中</span>
+ <span class="token keyword">private</span> <span class="token class-name">ArrayMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">File</span><span class="token punctuation">,</span> <span class="token class-name">SharedPreferencesImpl</span><span class="token punctuation">></span></span> <span class="token function">getSharedPreferencesCacheLocked</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+ <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+     <span class="token class-name">ArrayMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">File</span><span class="token punctuation">,</span> <span class="token class-name">SharedPreferencesImpl</span><span class="token punctuation">></span></span> packagePrefs <span class="token operator">=</span> sSharedPrefsCache<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>packageName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">if</span> <span class="token punctuation">(</span>packagePrefs <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+         packagePrefs <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         sSharedPrefsCache<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>packageName<span class="token punctuation">,</span> packagePrefs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token punctuation">&#125;</span>
+
+     <span class="token keyword">return</span> packagePrefs<span class="token punctuation">;</span>
+ <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>    
+
+
+<p>apply() 方法是异步的，可能会发生 ANR</p>
+<blockquote>
+<p>apply() 方法是异步的，本身是不会有任何问题，但是当生命周期处于  handleStopService() 、 handlePauseActivity() 、 handleStopActivity()<br>的时候会一直等待 apply() 方法将数据保存成功，否则会一直等待，从而阻塞主线程造成 ANR，一起来分析一下为什么异步方法还会阻塞主线程，先来看看 apply() 方法的实现。</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">apply</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">final</span> <span class="token keyword">long</span> startTime <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">final</span> <span class="token class-name">MemoryCommitResult</span> mcr <span class="token operator">=</span> <span class="token function">commitToMemory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> <span class="token class-name">Runnable</span> awaitCommit <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                mcr<span class="token punctuation">.</span>writtenToDiskLatch<span class="token punctuation">.</span><span class="token function">await</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 等待</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token comment">// 将 awaitCommit 添加到队列 QueuedWork 中</span>
+    <span class="token class-name">QueuedWork</span><span class="token punctuation">.</span><span class="token function">addFinisher</span><span class="token punctuation">(</span>awaitCommit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name">Runnable</span> postWriteRunnable <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                awaitCommit<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">QueuedWork</span><span class="token punctuation">.</span><span class="token function">removeFinisher</span><span class="token punctuation">(</span>awaitCommit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token comment">// 8.0 之前加入到一个单线程的线程池中执行</span>
+    <span class="token comment">// 8.0 之后加入 HandlerThread 中执行写入任务</span>
+    <span class="token class-name">SharedPreferencesImpl</span><span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">enqueueDiskWrite</span><span class="token punctuation">(</span>mcr<span class="token punctuation">,</span> postWriteRunnable<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>   
+<ul>
+<li>将一个 awaitCommit 的  Runnable 任务，添加到队列 QueuedWork 中，在 awaitCommit 中会调用 await() 方法等待，<br>在 handleStopService 、 handleStopActivity 等等生命周期会以这个作为判断条件，等待任务执行完毕</li>
+<li>将一个 postWriteRunnable 的  Runnable 写任务，通过 enqueueDiskWrite 方法，将写入任务加入到队列中，而写入任务在一个线程中执行</li>
+</ul>
+<p>注意：在 8.0 之前和 8.0 之后 enqueueDiskWrite() 方法实现逻辑各不相同。</p>
+<blockquote>
+<p>在 8.0 之前调用 enqueueDiskWrite() 方法，将写入任务加入到 单个线程的线程池 中执行，如果 apply() 多次的话，任务将会依次执行，效率很低，android-7.0.0_r34 源码如下所示。<br>通过 Executors.newSingleThreadExecutor() 方法创建了一个 单个线程的线程池，因此任务是串行的，通过 apply() 方法创建的任务，都会添加到这个线程池内。</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// android-7.0.0_r34: frameworks/base/core/java/android/app/SharedPreferencesImpl.java</span>
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">enqueueDiskWrite</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">MemoryCommitResult</span> mcr<span class="token punctuation">,</span>
+                              <span class="token keyword">final</span> <span class="token class-name">Runnable</span> postWriteRunnable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token class-name">QueuedWork</span><span class="token punctuation">.</span><span class="token function">singleThreadExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span>writeToDiskRunnable<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+  
+<span class="token comment">// android-7.0.0_r34: frameworks/base/core/java/android/app/QueuedWork.java</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">singleThreadExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token class-name">QueuedWork</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sSingleThreadExecutor <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            sSingleThreadExecutor <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newSingleThreadExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> sSingleThreadExecutor<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>  
+
+<p>在 8.0 之后将写入任务加入到 LinkedList 链表中，在 HandlerThread 中执行写入任务，android-10.0.0_r14 源码如下所示。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">    <span class="token comment">// android-10.0.0_r14: frameworks/base/core/java/android/app/SharedPreferencesImpl.java</span>
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">enqueueDiskWrite</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">MemoryCommitResult</span> mcr<span class="token punctuation">,</span>
+                                  <span class="token keyword">final</span> <span class="token class-name">Runnable</span> postWriteRunnable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        <span class="token class-name">QueuedWork</span><span class="token punctuation">.</span><span class="token function">queue</span><span class="token punctuation">(</span>writeToDiskRunnable<span class="token punctuation">,</span> <span class="token operator">!</span>isFromSyncCommit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+<span class="token comment">// android-10.0.0_r14: frameworks/base/core/java/android/app/QueuedWork.java</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">LinkedList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">></span></span> sWork <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LinkedList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">queue</span><span class="token punctuation">(</span><span class="token class-name">Runnable</span> work<span class="token punctuation">,</span> <span class="token keyword">boolean</span> shouldDelay<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Handler</span> handler <span class="token operator">=</span> <span class="token function">getHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获取 handlerThread.getLooper() 生成 Handler 对象</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>sLock<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            sWork<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>work<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 将写入任务加入到 LinkedList 链表中</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>shouldDelay <span class="token operator">&amp;&amp;</span> sCanDelay<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                handler<span class="token punctuation">.</span><span class="token function">sendEmptyMessageDelayed</span><span class="token punctuation">(</span><span class="token class-name">QueuedWorkHandler</span><span class="token punctuation">.</span>MSG_RUN<span class="token punctuation">,</span> DELAY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                handler<span class="token punctuation">.</span><span class="token function">sendEmptyMessage</span><span class="token punctuation">(</span><span class="token class-name">QueuedWorkHandler</span><span class="token punctuation">.</span>MSG_RUN<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre> 
+
+<blockquote>
+<p>在 8.0 之后通过调用 handlerThread.getLooper() 方法生成 Handler，任务都会在 HandlerThread 中执行，所有通过 apply() 方法创建的任务，都会添加到 LinkedList 链表中。<br>  当生命周期处于 handleStopService() 、 handlePauseActivity() 、 handleStopActivity() 的时候会调用 QueuedWork.waitToFinish() 会等待写入任务执行完毕，我们以其中  handlePauseActivity() 方法为例。<br>  正如你所看到的在 handlePauseActivity() 方法中，调用了 QueuedWork.waitToFinish() 方法，会等待所有的写入执行完毕，Google 在 8.0 之后对这个方法做了很大的优化，一起来看一下 8.0 之前和 8.0 之后的区别。</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token comment">// android-7.0.0_r34: frameworks/base/core/java/android/app/ActivityThread.java</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handlePauseActivity</span><span class="token punctuation">(</span><span class="token class-name">IBinder</span> token<span class="token punctuation">,</span> <span class="token keyword">boolean</span> finished<span class="token punctuation">,</span> <span class="token keyword">boolean</span> userLeaving<span class="token punctuation">,</span>
+                                <span class="token keyword">int</span> configChanges<span class="token punctuation">,</span> <span class="token class-name">PendingTransactionActions</span> pendingActions<span class="token punctuation">,</span> <span class="token class-name">String</span> reason<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token comment">// 确保写任务都已经完成</span>
+    <span class="token class-name">QueuedWork</span><span class="token punctuation">.</span><span class="token function">waitToFinish</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre> 
+
+<p>在 8.0 之前 waitToFinish() 方法只做了一件事，会一直等待写入任务执行完毕， android-7.0.0_r34 源码实现。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// android-7.0.0_r34: frameworks/base/core/java/android/app/QueuedWork.java</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">ConcurrentLinkedQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">></span></span> sPendingWorkFinishers <span class="token operator">=</span>
+        <span class="token keyword">new</span> <span class="token class-name">ConcurrentLinkedQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">waitToFinish</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">Runnable</span> toFinish<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>toFinish <span class="token operator">=</span> sPendingWorkFinishers<span class="token punctuation">.</span><span class="token function">poll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        toFinish<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 相当于调用 `mcr.writtenToDiskLatch.await()` 方法</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>     
+
+<blockquote>
+<p>sPendingWorkFinishers 是 ConcurrentLinkedQueue 实例，apply 方法会将写入任务添加到 sPendingWorkFinishers 队列中，在 单个线程的线程池 中执行写入任务，线程的调度并不由程序来控制，也就是说当生命周期切换的时候，任务不一定处于执行状态<br>  toFinish.run() 方法，相当于调用 mcr.writtenToDiskLatch.await() 方法，会一直等待.<br>  waitToFinish() 方法就做了一件事，会一直等待写入任务执行完毕，其它什么都不做，当有很多写入任务，会依次执行，当文件很大时，效率很低，造成 ANR 就不奇怪了</p>
+</blockquote>
+<p>在 8.0 之后 waitToFinish() 方法做了很大的优化，当生命周期切换的时候，会主动触发任务的执行，而不是一直在等着，我们来看看 android-10.0.0_r14 源码实现。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// android-10.0.0_r14: frameworks/base/core/java/android/app/QueuedWork.java</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">LinkedList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">></span></span> sFinishers <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LinkedList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">waitToFinish</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">processPendingWork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 主动触发任务的执行</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">StrictMode</span><span class="token punctuation">.</span><span class="token function">setThreadPolicy</span><span class="token punctuation">(</span>oldPolicy<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+  
+    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 等待任务执行完毕</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">Runnable</span> finisher<span class="token punctuation">;</span>
+  
+            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>sLock<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                finisher <span class="token operator">=</span> sFinishers<span class="token punctuation">.</span><span class="token function">poll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 从 LinkedList 中取出任务</span>
+            <span class="token punctuation">&#125;</span>
+  
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>finisher <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 当 LinkedList 中没有任务时会跳出循环</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+  
+            finisher<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 相当于调用 `mcr.writtenToDiskLatch.await()`</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span> 
+  
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre> 
+<blockquote>
+<p>在 waitToFinish() 方法中会主动调用 processPendingWork() 方法触发任务的执行，在 HandlerThread 中执行写入任务。<br>  另外还做了一个很重要的优化，当调用 apply() 方法的时候，执行磁盘写入，都是全量写入，在 8.0 之前，调用 N 次 apply() 方法，就会执行 N 次磁盘写入，<br>  在 8.0 之后，apply() 方法调用了多次，只会执行最后一次写入，通过版本号来控制的。</p>
+</blockquote>
+<h3 id="DataStore"><a href="#DataStore" class="headerlink" title="DataStore"></a>DataStore</h3><h4 id="1-DataStore简介"><a href="#1-DataStore简介" class="headerlink" title="1. DataStore简介"></a>1. DataStore简介</h4><p>Preferences DataStore 是JetPack最新提供的简单数据键值对数据存储组件，主要用来替换 SharedPreferences。Preferences DataStore 只支持 Int , Long , Boolean , Float , String 键值对数据，<br>适合存储简单、小型的数据，并且不支持局部更新，如果修改了其中一个值，整个文件内容将会被重新序列化，<br>可以运行 AndroidX-Jetpack-Practice&#x2F;DataStoreSimple 体验一下，如果需要局部更新，建议使用 Room。<br>另外 Jetpack DataStore 提供了 Proto DataStore 方式，用于存储类的对象（typed objects ），通过 protocol buffers 将对象序列化存储在本地</p>
+<p>Preferences DataStore的优点</p>
+<ul>
+<li>DataStore 是基于 Flow 实现的，所以保证了在主线程的安全性</li>
+<li>以事务方式处理更新数据，事务有四大特性（原子性、一致性、 隔离性、持久性）</li>
+<li>没有 apply() 和 commit() 等等数据持久的方法</li>
+<li>自动完成 SharedPreferences 迁移到 DataStore，保证数据一致性，不会造成数据损坏</li>
+<li>可以监听到操作成功或者失败结果</li>
+</ul>
+<h4 id="2-DataStore基本用法"><a href="#2-DataStore基本用法" class="headerlink" title="2. DataStore基本用法"></a>2. DataStore基本用法</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token comment">// 项目module下的build.gradle添加依赖</span>
+dependencies <span class="token punctuation">&#123;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token comment">// Preferences DataStore</span>
+    implementation <span class="token string">"androidx.datastore:datastore-preferences:1.0.0-alpha01"</span>
+
+    <span class="token comment">// Proto DataStore</span>
+    implementation <span class="token string">"androidx.datastore:datastore-core:1.0.0-alpha01"</span>
+    
+   implementation 'com<span class="token punctuation">.</span>tencent<span class="token operator">:</span>mmkv<span class="token operator">:</span><span class="token number">1.0</span><span class="token number">.23</span>'
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 读取数据</span>
+
+<span class="token comment">// 这里和我们之前使用 SharedPreferences 的有点不一样，在 Preferences DataStore 中 Key 是一个 Preferences.Key&lt;T> 类型，只支持 Int , Long , Boolean , Float , String</span>
+fun <span class="token function">readFromDataStore</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          btn_data_store_read<span class="token operator">?</span><span class="token punctuation">.</span>setOnClickListener <span class="token punctuation">&#123;</span>
+              val startTime <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+              <span class="token comment">// 获取datastore实例</span>
+              val dataStore<span class="token operator">:</span> <span class="token class-name">DataStore</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Preferences</span><span class="token punctuation">></span></span> <span class="token operator">=</span>
+                  <span class="token keyword">this</span><span class="token annotation punctuation">@MainActivity.createDataStore</span><span class="token punctuation">(</span>name <span class="token operator">=</span> dataStoreName<span class="token punctuation">)</span>
+              <span class="token comment">//     </span>
+              val nameKey <span class="token operator">=</span> preferencesKey<span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token string">"userName"</span><span class="token punctuation">)</span>
+              <span class="token comment">// 基于Flow实现</span>
+              val dataFlow<span class="token operator">:</span> <span class="token class-name">Flow</span><span class="token operator">&lt;</span><span class="token class-name">Map</span><span class="token operator">&lt;</span><span class="token class-name">Preferences<span class="token punctuation">.</span>Key</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">></span><span class="token punctuation">,</span> <span class="token class-name">Any</span><span class="token operator">>></span> <span class="token operator">=</span> dataStore<span class="token punctuation">.</span>data<span class="token punctuation">.</span><span class="token keyword">catch</span> <span class="token punctuation">&#123;</span>
+                  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> is <span class="token class-name">IOException</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                      <span class="token function">emit</span><span class="token punctuation">(</span><span class="token function">emptyPreferences</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> is <span class="token class-name">Throwable</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                      <span class="token keyword">throw</span> <span class="token keyword">this</span>
+                  <span class="token punctuation">&#125;</span>
+              <span class="token punctuation">&#125;</span><span class="token punctuation">.</span>map <span class="token punctuation">&#123;</span> preferences <span class="token operator">-></span>
+                 <span class="token comment">// 获取名为userName 的建值</span>
+                 <span class="token comment">// preferences[nameKey] ?: ""</span>
+                  preferences<span class="token punctuation">.</span><span class="token function">asMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+              <span class="token punctuation">&#125;</span>
+              <span class="token comment">// 启动协程</span>
+              <span class="token class-name">GlobalScope</span><span class="token punctuation">.</span>launch <span class="token punctuation">&#123;</span>
+                  dataFlow<span class="token punctuation">.</span>collect <span class="token punctuation">&#123;</span> pairs <span class="token operator">-></span>
+                      val endTime <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                      <span class="token class-name">Log</span><span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span>tag<span class="token punctuation">,</span> <span class="token string">"从data store读取，cost time = $&#123;endTime - startTime&#125; ms"</span><span class="token punctuation">)</span>
+                      <span class="token keyword">for</span> <span class="token punctuation">(</span>pair in pairs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                      <span class="token comment">// 打印获取到的键值对</span>
+                          <span class="token class-name">Log</span><span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span>tag<span class="token punctuation">,</span> <span class="token string">"key=$&#123;pair.key&#125;,value=$&#123;pair.value&#125;"</span><span class="token punctuation">)</span>
+                      <span class="token punctuation">&#125;</span>
+                  <span class="token punctuation">&#125;</span>
+              <span class="token punctuation">&#125;</span>
+          <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 写入数据</span>
+fun <span class="token function">writeToDataStore</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+        btn_data_store_write<span class="token operator">?</span><span class="token punctuation">.</span>setOnClickListener <span class="token punctuation">&#123;</span>
+           <span class="token comment">// 获取datastore实例</span>
+            val dataStore<span class="token operator">:</span> <span class="token class-name">DataStore</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Preferences</span><span class="token punctuation">></span></span> <span class="token operator">=</span>
+                <span class="token keyword">this</span><span class="token annotation punctuation">@MainActivity.createDataStore</span><span class="token punctuation">(</span>name <span class="token operator">=</span> dataStoreName<span class="token punctuation">)</span>
+             <span class="token comment">// 启动协程     </span>
+            <span class="token class-name">GlobalScope</span><span class="token punctuation">.</span>launch <span class="token punctuation">&#123;</span>
+                <span class="token function">saveData</span><span class="token punctuation">(</span>dataStore<span class="token punctuation">)</span>
+            <span class="token punctuation">&#125;</span>
+
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    suspend fun <span class="token function">saveData</span><span class="token punctuation">(</span>dataStore<span class="token operator">:</span> <span class="token class-name">DataStore</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Preferences</span><span class="token punctuation">></span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Log</span><span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span>tag<span class="token punctuation">,</span> <span class="token string">"save data..."</span><span class="token punctuation">)</span>
+        val nameKey <span class="token operator">=</span> preferencesKey<span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token string">"userName"</span><span class="token punctuation">)</span>
+        val ageKey <span class="token operator">=</span> preferencesKey<span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Int</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token string">"userAge"</span><span class="token punctuation">)</span>
+        val introductionKey <span class="token operator">=</span> preferencesKey<span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token string">"userIntroduction"</span><span class="token punctuation">)</span>
+        <span class="token comment">// 更新键值对</span>
+        dataStore<span class="token punctuation">.</span>edit <span class="token punctuation">&#123;</span> settings <span class="token operator">-></span>
+            settings<span class="token punctuation">[</span>nameKey<span class="token punctuation">]</span> <span class="token operator">=</span> userName
+            settings<span class="token punctuation">[</span>ageKey<span class="token punctuation">]</span> <span class="token operator">=</span> userAge
+            settings<span class="token punctuation">[</span>introductionKey<span class="token punctuation">]</span> <span class="token operator">=</span> userIntroduction
+            <span class="token class-name">Log</span><span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span>tag<span class="token punctuation">,</span> <span class="token string">"save data done"</span><span class="token punctuation">)</span>
+
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre> 
+
+<h4 id="3-从SharedPreferences迁移到Preferences-DataStore"><a href="#3-从SharedPreferences迁移到Preferences-DataStore" class="headerlink" title="3. 从SharedPreferences迁移到Preferences DataStore"></a>3. 从SharedPreferences迁移到Preferences DataStore</h4><p>在使用DataStore之前，保证完成迁移.<br>当 DataStore 对象构建完了之后，需要执行一次读取或者写入操作，即可完成 SharedPreferences 迁移到  DataStore，当迁移成功之后，会自动删除 SharedPreferences 使用的文件</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token comment">// 迁移到Preferences DataStore</span>
+fun <span class="token function">migration</span><span class="token punctuation">(</span>context<span class="token operator">:</span> <span class="token class-name">Context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    val dataStore<span class="token operator">:</span> <span class="token class-name">DataStore</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Preferences</span><span class="token punctuation">></span></span> <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">createDataStore</span><span class="token punctuation">(</span>
+        name <span class="token operator">=</span> <span class="token string">"settings"</span><span class="token punctuation">,</span>
+        migrations <span class="token operator">=</span> <span class="token function">listOf</span><span class="token punctuation">(</span><span class="token class-name">SharedPreferencesMigration</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> <span class="token string">"settings_preferences"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token comment">// 迁移到Proto DataStore</span>
+ fun <span class="token function">migration</span><span class="token punctuation">(</span>context<span class="token operator">:</span> <span class="token class-name">Context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+     val settingsDataStore<span class="token operator">:</span> <span class="token class-name">DataStore</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Settings</span><span class="token punctuation">></span></span> <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">createDataStore</span><span class="token punctuation">(</span>
+         produceFile <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token class-name">File</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span>filesDir<span class="token punctuation">,</span> <span class="token string">"settings.preferences_pb"</span><span class="token punctuation">)</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+         serializer <span class="token operator">=</span> <span class="token class-name">SettingsSerializer</span><span class="token punctuation">,</span>
+         migrations <span class="token operator">=</span> <span class="token function">listOf</span><span class="token punctuation">(</span>
+             <span class="token class-name">SharedPreferencesMigration</span><span class="token punctuation">(</span>
+                 context<span class="token punctuation">,</span>
+                 <span class="token string">"settings_preferences"</span>
+             <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> sharedPrefs<span class="token operator">:</span> <span class="token class-name">SharedPreferencesView</span><span class="token punctuation">,</span> currentData<span class="token operator">:</span> <span class="token class-name">UserPreferences</span> <span class="token operator">-></span>
+                 <span class="token comment">// Map your sharedPrefs to your type here</span>
+             <span class="token punctuation">&#125;</span>
+         <span class="token punctuation">)</span>
+     <span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre> 
+
+
+<h4 id="3-DataStore工作流程"><a href="#3-DataStore工作流程" class="headerlink" title="3. DataStore工作流程"></a>3. DataStore工作流程</h4><img src="/blogs/images/DataStore%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B.png" class="[图三]" title="[图三]"> 
+
+
+
+<h3 id="MMKV"><a href="#MMKV" class="headerlink" title="MMKV"></a>MMKV</h3><h5 id="1-MMKV简介"><a href="#1-MMKV简介" class="headerlink" title="1. MMKV简介"></a>1. MMKV简介</h5><p>MMKV 是腾讯开源的一款基于 mmap 内存映射的 key-value 组件，底层序列化&#x2F;反序列化使用 protobuf 实现，性能高，稳定性强，<br>从 2015 年中至今在微信上使用，其性能和稳定性经过了时间的验证。<a target="_blank" rel="noopener" href="https://github.com/Tencent/MMKV">GitHub地址</a></p>
+<p>MMKV 优点</p>
+<ul>
+<li>数据加密。 在 Android 环境里，数据加密是非常必须的，SP实际上是把键值对放到本地文件中进行存储。如果要保证数据安全需要自己加密，MMKV 使用了 AES CFB-128 算法来加密&#x2F;解密。</li>
+<li>多进程共享。系统自带的 SharedPreferences 对多进程的支持不好。现有基于 ContentProvider 封装的实现，虽然多进程是支持了，但是性能低下，经常导致 ANR。考虑到 mmap 共享内存本质上是多进程共享的，MMKV 在这个基础上，深入挖掘了 Android 系统的能力，提供了可能是业界最高效的多进程数据共享组件。</li>
+<li>匿名内存。 在多进程共享的基础上，考虑到某些敏感数据(例如密码)需要进程间共享，但是不方便落地存储到文件上，直接用 mmap 不合适。而Android 系统提供了 Ashmem 匿名共享内存的能力，它在进程退出后就会消失，不会落地到文件上，非常适合这个场景。MMKV 基于此也提供了 Ashmem(匿名共享内存) MMKV 的功能。</li>
+<li>效率更高。MMKV 使用protobuf进行序列化和反序列化，比起SP的xml存放方式，更加高效。</li>
+<li>支持从 SP迁移，如果你之前项目里面都是使用SP，现在想改为使用MMKV，只需几行代码即可将之前的SP实现迁移到MMKV。</li>
+</ul>
+<p>支持的数据类型</p>
+<ul>
+<li><p>支持以下 Java 语言基础类型：</p>
+<blockquote>
+<p>boolean、int、long、float、double、byte[]</p>
+</blockquote>
+</li>
+<li><p>支持以下 Java 类和容器：</p>
+<blockquote>
+<p>String、Set&lt; String &gt;<br>任何实现了Parcelable的类型</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="2-基本用法"><a href="#2-基本用法" class="headerlink" title="2. 基本用法"></a>2. 基本用法</h5><pre class="line-numbers language-java" data-language="java"><code class="language-java"> 
+ <span class="token comment">// 项目module下的build.gradle添加依赖</span>
+ dependencies <span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token comment">// mmkv</span>
+    implementation 'com<span class="token punctuation">.</span>tencent<span class="token operator">:</span>mmkv<span class="token operator">:</span><span class="token number">1.0</span><span class="token number">.23</span>'
+ <span class="token punctuation">&#125;</span>
+ 
+ <span class="token comment">// 在Application中初始化</span>
+ MMKV<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+ <span class="token comment">// 存储数据</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">saveData</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">MMKV</span> kv <span class="token operator">=</span> MMKV<span class="token punctuation">.</span><span class="token function">defaultMMKV</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// 存储数据很简单了，只需要调用如下一行代码即可，不用再如prefences一样调用apply或commit：</span>
+    kv<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">"bool"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token comment">// 获取存储的信息</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"bool: "</span> <span class="token operator">+</span> kv<span class="token punctuation">.</span><span class="token function">decodeBool</span><span class="token punctuation">(</span><span class="token string">"bool"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    kv<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">"int"</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>MIN_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"int: "</span> <span class="token operator">+</span> kv<span class="token punctuation">.</span><span class="token function">decodeInt</span><span class="token punctuation">(</span><span class="token string">"int"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    kv<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">"long"</span><span class="token punctuation">,</span> <span class="token class-name">Long</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"long: "</span> <span class="token operator">+</span> kv<span class="token punctuation">.</span><span class="token function">decodeLong</span><span class="token punctuation">(</span><span class="token string">"long"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    kv<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">"float"</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">3.14f</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"float: "</span> <span class="token operator">+</span> kv<span class="token punctuation">.</span><span class="token function">decodeFloat</span><span class="token punctuation">(</span><span class="token string">"float"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    kv<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">"double"</span><span class="token punctuation">,</span> <span class="token class-name">Double</span><span class="token punctuation">.</span>MIN_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"double: "</span> <span class="token operator">+</span> kv<span class="token punctuation">.</span><span class="token function">decodeDouble</span><span class="token punctuation">(</span><span class="token string">"double"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    kv<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">"string"</span><span class="token punctuation">,</span> <span class="token string">"Hello from mmkv"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"string: "</span> <span class="token operator">+</span> kv<span class="token punctuation">.</span><span class="token function">decodeString</span><span class="token punctuation">(</span><span class="token string">"string"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> bytes <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token char">'m'</span><span class="token punctuation">,</span> <span class="token char">'m'</span><span class="token punctuation">,</span> <span class="token char">'k'</span><span class="token punctuation">,</span> <span class="token char">'v'</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    kv<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">"bytes"</span><span class="token punctuation">,</span> bytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"bytes: "</span> <span class="token operator">+</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>kv<span class="token punctuation">.</span><span class="token function">decodeBytes</span><span class="token punctuation">(</span><span class="token string">"bytes"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 查询与删除</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">query</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+       <span class="token class-name">MMKV</span> kv <span class="token operator">=</span> MMKV<span class="token punctuation">.</span><span class="token function">defaultMMKV</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">MMKV</span> kv <span class="token operator">=</span> MMKV<span class="token punctuation">.</span><span class="token function">defaultMMKV</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       kv<span class="token punctuation">.</span><span class="token function">removeValueForKey</span><span class="token punctuation">(</span><span class="token string">"bool"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"bool: "</span> <span class="token operator">+</span> kv<span class="token punctuation">.</span><span class="token function">decodeBool</span><span class="token punctuation">(</span><span class="token string">"bool"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       kv<span class="token punctuation">.</span><span class="token function">removeValuesForKeys</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">&#123;</span><span class="token string">"int"</span><span class="token punctuation">,</span> <span class="token string">"long"</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"allKeys: "</span> <span class="token operator">+</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>kv<span class="token punctuation">.</span><span class="token function">allKeys</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       kv<span class="token punctuation">.</span><span class="token function">clearAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token keyword">boolean</span> hasBool <span class="token operator">=</span> kv<span class="token punctuation">.</span><span class="token function">containsKey</span><span class="token punctuation">(</span><span class="token string">"bool"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span>
+   
+   <span class="token comment">// 业务区分，分别存储</span>
+   <span class="token class-name">MMKV</span> mmkv <span class="token operator">=</span> MMKV<span class="token punctuation">.</span><span class="token function">mmkvWithID</span><span class="token punctuation">(</span><span class="token string">"MyID"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   mmkv<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">"bool"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   
+   
+   <span class="token comment">//支持多进程 </span>
+   <span class="token class-name">MMKV</span> mmkv <span class="token operator">=</span> MMKV<span class="token punctuation">.</span><span class="token function">mmkvWithID</span><span class="token punctuation">(</span><span class="token string">"InterProcessKV"</span><span class="token punctuation">,</span> MMKV<span class="token punctuation">.</span>MULTI_PROCESS_MODE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   mmkv<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">"bool"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre> 
+<h4 id="3-从SharedPreferences迁移到MMKV"><a href="#3-从SharedPreferences迁移到MMKV" class="headerlink" title="3. 从SharedPreferences迁移到MMKV"></a>3. 从SharedPreferences迁移到MMKV</h4> <pre class="line-numbers language-java" data-language="java"><code class="language-java"> 
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">testImportSharedPreferences</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">//SharedPreferences preferences = getSharedPreferences("myData", MODE_PRIVATE);</span>
+    <span class="token class-name">MMKV</span> preferences <span class="token operator">=</span> MMKV<span class="token punctuation">.</span><span class="token function">mmkvWithID</span><span class="token punctuation">(</span><span class="token string">"myData"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 迁移旧数据</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SharedPreferences</span> old_man <span class="token operator">=</span> <span class="token function">getSharedPreferences</span><span class="token punctuation">(</span><span class="token string">"myData"</span><span class="token punctuation">,</span> MODE_PRIVATE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        preferences<span class="token punctuation">.</span><span class="token function">importFromSharedPreferences</span><span class="token punctuation">(</span>old_man<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        old_man<span class="token punctuation">.</span><span class="token function">edit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">// 跟以前用法一样</span>
+    <span class="token class-name">SharedPreferences<span class="token punctuation">.</span>Editor</span> editor <span class="token operator">=</span> preferences<span class="token punctuation">.</span><span class="token function">edit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    editor<span class="token punctuation">.</span><span class="token function">putBoolean</span><span class="token punctuation">(</span><span class="token string">"bool"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    editor<span class="token punctuation">.</span><span class="token function">putInt</span><span class="token punctuation">(</span><span class="token string">"int"</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>MIN_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    editor<span class="token punctuation">.</span><span class="token function">putLong</span><span class="token punctuation">(</span><span class="token string">"long"</span><span class="token punctuation">,</span> <span class="token class-name">Long</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    editor<span class="token punctuation">.</span><span class="token function">putFloat</span><span class="token punctuation">(</span><span class="token string">"float"</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">3.14f</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    editor<span class="token punctuation">.</span><span class="token function">putString</span><span class="token punctuation">(</span><span class="token string">"string"</span><span class="token punctuation">,</span> <span class="token string">"hello, imported"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> set <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    set<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"W"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> set<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"e"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    set<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"C"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    set<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"h"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    set<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    set<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"t"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    editor<span class="token punctuation">.</span><span class="token function">putStringSet</span><span class="token punctuation">(</span><span class="token string">"string-set"</span><span class="token punctuation">,</span> set<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 无需调用 commit()</span>
+    <span class="token comment">//editor.commit();</span>
+<span class="token punctuation">&#125;</span>
+ <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre> 
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/blogs/about" rel="external nofollow noreferrer">Allen</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://allennzhang.github.io/blogs/blogs/2020/12/01/android-jian-dan-shu-ju-cun-chu-fang-shi-qian-xi/">https://allennzhang.github.io/blogs/blogs/2020/12/01/android-jian-dan-shu-ju-cun-chu-fang-shi-qian-xi/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/blogs/about" target="_blank">Allen</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/blogs/tags/Android/">
+                                    <span class="chip bg-color">Android</span>
+                                </a>
+                            
+                                <a href="/blogs/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">
+                                    <span class="chip bg-color">数据存储</span>
+                                </a>
+                            
+                                <a href="/blogs/tags/SharedPreferences/">
+                                    <span class="chip bg-color">SharedPreferences</span>
+                                </a>
+                            
+                                <a href="/blogs/tags/DataStore/">
+                                    <span class="chip bg-color">DataStore</span>
+                                </a>
+                            
+                                <a href="/blogs/tags/MMKV/">
+                                    <span class="chip bg-color">MMKV</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/blogs/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/blogs/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/blogs/2021/09/26/android-q-wen-jian-cun-chu-jian-rong-fang-an/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/blogs/medias/featureimages/21.jpg" class="responsive-img" alt="Android Q 文件存储兼容方案">
+                        
+                        <span class="card-title">Android Q 文件存储兼容方案</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-26
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/blogs/categories/Android/" class="post-category">
+                                    Android
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/blogs/tags/Android/">
+                        <span class="chip bg-color">Android</span>
+                    </a>
+                    
+                    <a href="/blogs/tags/%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8/">
+                        <span class="chip bg-color">文件存储</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/blogs/2020/09/18/jni-dong-tai-lian-jie-ku-so-ni-xiang-fan-bian-yi-xue-xi-ji-qiao/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/blogs/medias/featureimages/20.jpg" class="responsive-img" alt="JNI动态链接库so逆向反编译学习技巧">
+                        
+                        <span class="card-title">JNI动态链接库so逆向反编译学习技巧</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-09-18
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/blogs/categories/%E9%80%86%E5%90%91%E5%AE%89%E5%85%A8/" class="post-category">
+                                    逆向安全
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/blogs/tags/Android/">
+                        <span class="chip bg-color">Android</span>
+                    </a>
+                    
+                    <a href="/blogs/tags/JNI/">
+                        <span class="chip bg-color">JNI</span>
+                    </a>
+                    
+                    <a href="/blogs/tags/so%E5%8F%8D%E7%BC%96%E8%AF%91/">
+                        <span class="chip bg-color">so反编译</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/blogs/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/blogs/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/blogs/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/blogs/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/blogs/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/blogs/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/blogs/libs/aplayer/APlayer.min.js"></script>
+<script src="/blogs/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2022</span>
+            
+            <a href="/blogs/about" target="_blank">Allen</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+    <a href="https://github.com/AllennZhang" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:869881916@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=869881916" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 869881916" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/blogs/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/blogs/libs/materialize/materialize.min.js"></script>
+    <script src="/blogs/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/blogs/libs/aos/aos.js"></script>
+    <script src="/blogs/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/blogs/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/blogs/js/matery.js"></script>
+
+    
+
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/blogs/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/blogs/libs/others/clicklove.js" async="async"></script>
+    
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/blogs/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
