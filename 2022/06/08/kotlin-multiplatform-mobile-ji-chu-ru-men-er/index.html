@@ -737,6 +737,26 @@ struct ContentView_Previews<span class="token operator">:</span> PreviewProvider
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h4 id="3-2-login-framework-分析"><a href="#3-2-login-framework-分析" class="headerlink" title="3.2  login.framework 分析"></a>3.2  login.framework 分析</h4><ul>
+<li>我们在login module commonMain下的LoginService 中 分别声明了 3个函数方法：</li>
+</ul>
+<blockquote>
+<p> fun login(userName: String?, userPassword: String?): LoginResult  <br/><br>该方法是一个普通方法，同步返回结果</p>
+</blockquote>
+<blockquote>
+<p> suspend fun loginAsync(userName: String?, userPassword: String?): LoginResult <br/></p>
+<p>该方法是一个挂起函数，接受两个参数userName，userPassword <br/></p>
+<p>在android中配合协程使用可以直接通过 val loginJob &#x3D; async<LoginResult> { LoginService.loginAsync(email,password)}<br>val loginResult &#x3D; loginJob.await() 来获取结果  <br/></p>
+<p>在iOS中，suspend函数对应的会在函数参数的末尾位置，显示的声明一个completionHandler，类型为(LoginResult?, Error?) -&gt; Void的callback 来接收回调结果 <br/></p>
+<p>在iOS中启动suspend函数（启动协程）默认要在主线程中启动</p>
+</blockquote>
+<blockquote>
+<p> fun doWork(taskId: Int, task : ()-&gt; Unit, callback: ServiceCallBack?) <br/></p>
+<p>该方法是一个普通方法，最后一个参数为callback类型，通过callback异步接收回调结果</p>
+</blockquote>
+<img src="/blogs/images/kmm_simple_login_ios_framework.png" class="[KmmSimpleLogin-login.framework]" title="[KmmSimpleLogin-login.framework]">
+
+
 <h3 id="四-运行效果"><a href="#四-运行效果" class="headerlink" title="四 运行效果"></a>四 运行效果</h3><h4 id="4-1-android平台登录"><a href="#4-1-android平台登录" class="headerlink" title="4.1 android平台登录"></a>4.1 android平台登录</h4><img src="/blogs/images/kmm_simple_login_android.jpg" class="[KmmSimpleLogin-Android]" width="400" height="600" title="[KmmSimpleLogin-Android]">
 
 <h4 id="4-2-iOS平台登录"><a href="#4-2-iOS平台登录" class="headerlink" title="4.2 iOS平台登录"></a>4.2 iOS平台登录</h4><img src="/blogs/images/kmm_simple_login_ios.png" class="[KmmSimpleLogin-iOS]" title="[KmmSimpleLogin-iOS]">
