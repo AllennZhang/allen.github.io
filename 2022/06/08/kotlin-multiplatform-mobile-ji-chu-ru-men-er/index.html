@@ -408,7 +408,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h3 id="一-KmmSimpleLogin示例工程搭建"><a href="#一-KmmSimpleLogin示例工程搭建" class="headerlink" title="一 KmmSimpleLogin示例工程搭建"></a>一 KmmSimpleLogin示例工程搭建</h3><blockquote>
-<p>上一节[Kotlin Multiplatform Mobile基础入门(一)](Kotlin Multiplatform Mobile基础入门(一))篇介绍了Kotlin Multiplatform Mobile新建工程基础知识，本节主要通过登录示例工程来演示和说明</p>
+<p>上一节 <a href="https://allennzhang.github.io/blogs/2022/05/25/kotlin-multiplatform-mobile-ji-chu-ru-men-yi/">Kotlin Multiplatform Mobile基础入门(一)</a> <br/>介绍了Kotlin Multiplatform Mobile新建工程基础知识，本节主要通过登录示例工程来演示和说明</p>
 </blockquote>
 <h4 id="1-1-创建一个名为KmmSimpleLogin的多平台工程"><a href="#1-1-创建一个名为KmmSimpleLogin的多平台工程" class="headerlink" title="1.1 创建一个名为KmmSimpleLogin的多平台工程"></a>1.1 创建一个名为KmmSimpleLogin的多平台工程</h4><ul>
 <li>通过 AndroidStudio—&gt;File—&gt;New—&gt;Project—&gt;Kotlin Multiplatform App 新建向导创建一个Kmm App</li>
@@ -653,89 +653,83 @@ kotlin <span class="token punctuation">&#123;</span>
 
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="3-1-实现iOS平台登录界面UI"><a href="#3-1-实现iOS平台登录界面UI" class="headerlink" title="3.1  实现iOS平台登录界面UI"></a>3.1  实现iOS平台登录界面UI</h4><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">import</span> SwiftUI
+<h4 id="3-1-实现iOS平台登录界面UI"><a href="#3-1-实现iOS平台登录界面UI" class="headerlink" title="3.1  实现iOS平台登录界面UI"></a>3.1  实现iOS平台登录界面UI</h4><pre class="line-numbers language-swift" data-language="swift"><code class="language-swift"><span class="token keyword">import</span> <span class="token class-name">SwiftUI</span>
 <span class="token keyword">import</span> login
 
-struct ContentView<span class="token operator">:</span> View <span class="token punctuation">&#123;</span>
-<span class="token annotation builtin">@State</span> <span class="token keyword">private</span> <span class="token keyword">var</span> userName<span class="token operator">:</span> String <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">""</span></span>
-<span class="token annotation builtin">@State</span> <span class="token keyword">private</span> <span class="token keyword">var</span> password<span class="token operator">:</span> String <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">""</span></span>
+<span class="token keyword">struct</span> <span class="token class-name">ContentView</span><span class="token punctuation">:</span> <span class="token class-name">View</span> <span class="token punctuation">&#123;</span>
+<span class="token attribute atrule">@State</span> <span class="token keyword">private</span> <span class="token keyword">var</span> userName<span class="token punctuation">:</span> <span class="token class-name">String</span> <span class="token operator">=</span> <span class="token string-literal"><span class="token string">""</span></span>
+<span class="token attribute atrule">@State</span> <span class="token keyword">private</span> <span class="token keyword">var</span> password<span class="token punctuation">:</span> <span class="token class-name">String</span> <span class="token operator">=</span> <span class="token string-literal"><span class="token string">""</span></span>
 
-    <span class="token keyword">var</span> body<span class="token operator">:</span> some View <span class="token punctuation">&#123;</span>
-        NavigationView <span class="token punctuation">&#123;</span>
-        <span class="token function">VStack</span><span class="token punctuation">(</span>spacing<span class="token operator">:</span><span class="token number">15</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-            <span class="token function">TextField</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"email"</span></span><span class="token punctuation">,</span>text<span class="token operator">:</span>$userName<span class="token punctuation">)</span>
+    <span class="token keyword">var</span> body<span class="token punctuation">:</span> <span class="token keyword">some</span> <span class="token class-name">View</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">NavigationView</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">VStack</span><span class="token punctuation">(</span>spacing<span class="token punctuation">:</span><span class="token number">15</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token class-name">TextField</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"email"</span></span><span class="token punctuation">,</span>text<span class="token punctuation">:</span>$userName<span class="token punctuation">)</span>
                 <span class="token punctuation">.</span><span class="token function">multilineTextAlignment</span><span class="token punctuation">(</span><span class="token comment">/*@START_MENU_TOKEN@*/</span><span class="token punctuation">.</span>leading<span class="token comment">/*@END_MENU_TOKEN@*/</span><span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token function">frame</span><span class="token punctuation">(</span>height<span class="token operator">:</span><span class="token number">50</span><span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token function">textFieldStyle</span><span class="token punctuation">(</span><span class="token function">RoundedBorderTextFieldStyle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">frame</span><span class="token punctuation">(</span>height<span class="token punctuation">:</span><span class="token number">50</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">textFieldStyle</span><span class="token punctuation">(</span><span class="token class-name">RoundedBorderTextFieldStyle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
                 <span class="token punctuation">.</span><span class="token function">cornerRadius</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
-            <span class="token function">SecureField</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"password"</span></span><span class="token punctuation">,</span>text<span class="token operator">:</span>$password<span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token function">frame</span><span class="token punctuation">(</span>height<span class="token operator">:</span><span class="token number">50</span><span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token function">textFieldStyle</span><span class="token punctuation">(</span><span class="token function">RoundedBorderTextFieldStyle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token class-name">SecureField</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"password"</span></span><span class="token punctuation">,</span>text<span class="token punctuation">:</span>$password<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">frame</span><span class="token punctuation">(</span>height<span class="token punctuation">:</span><span class="token number">50</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">textFieldStyle</span><span class="token punctuation">(</span><span class="token class-name">RoundedBorderTextFieldStyle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
                 <span class="token punctuation">.</span><span class="token function">cornerRadius</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
-            <span class="token function">Button</span><span class="token punctuation">(</span>action<span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token function">login</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> label<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-                <span class="token function">Text</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"登录"</span></span><span class="token punctuation">)</span>
+            <span class="token class-name">Button</span><span class="token punctuation">(</span>action<span class="token punctuation">:</span> <span class="token punctuation">&#123;</span><span class="token function">login</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> label<span class="token punctuation">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">Text</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"登录"</span></span><span class="token punctuation">)</span>
             <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-            <span class="token punctuation">.</span><span class="token function">foregroundColor</span><span class="token punctuation">(</span>Color<span class="token punctuation">.</span>white<span class="token punctuation">)</span>
-            <span class="token punctuation">.</span><span class="token function">frame</span><span class="token punctuation">(</span>width<span class="token operator">:</span> <span class="token number">300</span><span class="token punctuation">,</span> height<span class="token operator">:</span> <span class="token number">40</span><span class="token punctuation">,</span> alignment<span class="token operator">:</span> <span class="token comment">/*@START_MENU_TOKEN@*/</span><span class="token punctuation">.</span>center<span class="token comment">/*@END_MENU_TOKEN@*/</span><span class="token punctuation">)</span>
-            <span class="token punctuation">.</span><span class="token function">background</span><span class="token punctuation">(</span>Color<span class="token punctuation">.</span>blue<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">foregroundColor</span><span class="token punctuation">(</span><span class="token class-name">Color</span><span class="token punctuation">.</span>white<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">frame</span><span class="token punctuation">(</span>width<span class="token punctuation">:</span> <span class="token number">300</span><span class="token punctuation">,</span> height<span class="token punctuation">:</span> <span class="token number">40</span><span class="token punctuation">,</span> alignment<span class="token punctuation">:</span> <span class="token comment">/*@START_MENU_TOKEN@*/</span><span class="token punctuation">.</span>center<span class="token comment">/*@END_MENU_TOKEN@*/</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">background</span><span class="token punctuation">(</span><span class="token class-name">Color</span><span class="token punctuation">.</span>blue<span class="token punctuation">)</span>
             <span class="token punctuation">.</span><span class="token function">cornerRadius</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
            
         <span class="token punctuation">&#125;</span><span class="token punctuation">.</span><span class="token function">padding</span><span class="token punctuation">(</span><span class="token punctuation">.</span>all<span class="token punctuation">)</span>
      <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
     
-    func <span class="token function">login</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        Toast<span class="token punctuation">.</span><span class="token function">makeText</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"正在登录，请稍后..."</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"userName"</span></span><span class="token punctuation">,</span>self<span class="token punctuation">.</span>userName<span class="token punctuation">)</span>
-        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"password"</span></span><span class="token punctuation">,</span>self<span class="token punctuation">.</span>password<span class="token punctuation">)</span>
+    <span class="token keyword">func</span> <span class="token function-definition function">login</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">Toast</span><span class="token punctuation">.</span><span class="token function">makeText</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"正在登录，请稍后..."</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"userName"</span></span><span class="token punctuation">,</span><span class="token keyword">self</span><span class="token punctuation">.</span>userName<span class="token punctuation">)</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"password"</span></span><span class="token punctuation">,</span><span class="token keyword">self</span><span class="token punctuation">.</span>password<span class="token punctuation">)</span>
         <span class="token function">loginSuspend</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
     <span class="token punctuation">&#125;</span>
 
-    func <span class="token function">loginSuspend</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        DispatchQueue<span class="token punctuation">.</span><span class="token function">global</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">async</span> <span class="token punctuation">&#123;</span>
-            <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"Thread.mian"</span></span><span class="token punctuation">,</span>Thread<span class="token punctuation">.</span>isMainThread<span class="token punctuation">,</span>Thread<span class="token punctuation">.</span>current<span class="token punctuation">)</span>
+    <span class="token keyword">func</span> <span class="token function-definition function">loginSuspend</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">DispatchQueue</span><span class="token punctuation">.</span><span class="token function">global</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">async</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"Thread.mian"</span></span><span class="token punctuation">,</span><span class="token class-name">Thread</span><span class="token punctuation">.</span>isMainThread<span class="token punctuation">,</span><span class="token class-name">Thread</span><span class="token punctuation">.</span>current<span class="token punctuation">)</span>
         <span class="token punctuation">&#125;</span>
-        DispatchQueue<span class="token punctuation">.</span>main<span class="token punctuation">.</span><span class="token function">asyncAfter</span><span class="token punctuation">(</span>deadline<span class="token operator">:</span> DispatchTime<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">,</span> execute<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"Thread.main"</span></span><span class="token punctuation">,</span>Thread<span class="token punctuation">.</span>isMainThread<span class="token punctuation">,</span>Thread<span class="token punctuation">.</span>current<span class="token punctuation">)</span>
-        let loginResult<span class="token operator">:</span> Void <span class="token operator">=</span>  <span class="token function">LoginService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">loginAsync</span><span class="token punctuation">(</span>userName<span class="token operator">:</span>self<span class="token punctuation">.</span>userName<span class="token punctuation">,</span>userPassword<span class="token operator">:</span>self<span class="token punctuation">.</span>password<span class="token punctuation">,</span> completionHandler<span class="token operator">:</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token keyword">data</span><span class="token punctuation">,</span>error<span class="token punctuation">)</span> <span class="token keyword">in</span>
-            <span class="token keyword">if</span><span class="token punctuation">(</span>error <span class="token operator">==</span> nil<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-               DispatchQueue<span class="token punctuation">.</span>main<span class="token punctuation">.</span><span class="token function">async</span> <span class="token punctuation">&#123;</span>self<span class="token punctuation">.</span><span class="token function">handleLogin</span><span class="token punctuation">(</span>result<span class="token operator">:</span> <span class="token keyword">data</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span>
+        <span class="token class-name">DispatchQueue</span><span class="token punctuation">.</span>main<span class="token punctuation">.</span><span class="token function">asyncAfter</span><span class="token punctuation">(</span>deadline<span class="token punctuation">:</span> <span class="token class-name">DispatchTime</span><span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">,</span> execute<span class="token punctuation">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"Thread.main"</span></span><span class="token punctuation">,</span><span class="token class-name">Thread</span><span class="token punctuation">.</span>isMainThread<span class="token punctuation">,</span><span class="token class-name">Thread</span><span class="token punctuation">.</span>current<span class="token punctuation">)</span>
+        <span class="token keyword">let</span> loginResult<span class="token punctuation">:</span> <span class="token class-name">Void</span> <span class="token operator">=</span>  <span class="token class-name">LoginService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">loginAsync</span><span class="token punctuation">(</span>userName<span class="token punctuation">:</span><span class="token keyword">self</span><span class="token punctuation">.</span>userName<span class="token punctuation">,</span>userPassword<span class="token punctuation">:</span><span class="token keyword">self</span><span class="token punctuation">.</span>password<span class="token punctuation">,</span> completionHandler<span class="token punctuation">:</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span>error<span class="token punctuation">)</span> <span class="token keyword">in</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>error <span class="token operator">==</span> <span class="token nil constant">nil</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+               <span class="token class-name">DispatchQueue</span><span class="token punctuation">.</span>main<span class="token punctuation">.</span><span class="token keyword">async</span> <span class="token punctuation">&#123;</span><span class="token keyword">self</span><span class="token punctuation">.</span><span class="token function">handleLogin</span><span class="token punctuation">(</span>result<span class="token punctuation">:</span> data<span class="token punctuation">)</span><span class="token punctuation">&#125;</span>
             <span class="token punctuation">&#125;</span><span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-               <span class="token function">print</span><span class="token punctuation">(</span>error <span class="token operator">?</span><span class="token operator">?</span> <span class="token string-literal singleline"><span class="token string">"unkown error"</span></span><span class="token punctuation">)</span>
-               DispatchQueue<span class="token punctuation">.</span>main<span class="token punctuation">.</span><span class="token function">async</span> <span class="token punctuation">&#123;</span>Toast<span class="token punctuation">.</span><span class="token function">makeText</span><span class="token punctuation">(</span> <span class="token string-literal singleline"><span class="token string">"出错了"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span>
+               <span class="token function">print</span><span class="token punctuation">(</span>error <span class="token operator">??</span> <span class="token string-literal"><span class="token string">"unkown error"</span></span><span class="token punctuation">)</span>
+               <span class="token class-name">DispatchQueue</span><span class="token punctuation">.</span>main<span class="token punctuation">.</span><span class="token keyword">async</span> <span class="token punctuation">&#123;</span><span class="token class-name">Toast</span><span class="token punctuation">.</span><span class="token function">makeText</span><span class="token punctuation">(</span> <span class="token string-literal"><span class="token string">"出错了"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span>
             <span class="token punctuation">&#125;</span>
          <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"loginResult"</span></span><span class="token punctuation">,</span>loginResult<span class="token punctuation">)</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"loginResult"</span></span><span class="token punctuation">,</span>loginResult<span class="token punctuation">)</span>
         <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
     <span class="token punctuation">&#125;</span>
 
-    func <span class="token function">handleLogin</span><span class="token punctuation">(</span>result<span class="token operator">:</span> LoginResult<span class="token operator">?</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">if</span> let result <span class="token operator">=</span> result<span class="token punctuation">&#123;</span>
+    <span class="token keyword">func</span> <span class="token function-definition function">handleLogin</span><span class="token punctuation">(</span>result<span class="token punctuation">:</span> <span class="token class-name">LoginResult</span><span class="token operator">?</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token keyword">let</span> result <span class="token operator">=</span> result<span class="token punctuation">&#123;</span>
                 <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span>success<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                    <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"login success ,user="</span></span><span class="token punctuation">,</span>result<span class="token punctuation">.</span>user <span class="token operator">?</span><span class="token operator">?</span> <span class="token string-literal singleline"><span class="token string">""</span></span><span class="token punctuation">)</span>
+                    <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"login success ,user="</span></span><span class="token punctuation">,</span>result<span class="token punctuation">.</span>user <span class="token operator">??</span> <span class="token string-literal"><span class="token string">""</span></span><span class="token punctuation">)</span>
                     <span class="token function">goToHome</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
                 <span class="token punctuation">&#125;</span><span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-                    Toast<span class="token punctuation">.</span><span class="token function">makeText</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>msg <span class="token operator">?</span><span class="token operator">?</span> <span class="token string-literal singleline"><span class="token string">""</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token class-name">Toast</span><span class="token punctuation">.</span><span class="token function">makeText</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>msg <span class="token operator">??</span> <span class="token string-literal"><span class="token string">""</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
                 <span class="token punctuation">&#125;</span>
             <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 
 
-    func <span class="token function">goToHome</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> let window <span class="token operator">=</span> UIApplication<span class="token punctuation">.</span>shared<span class="token punctuation">.</span>windows<span class="token punctuation">.</span><span class="token function">first</span>
-        <span class="token punctuation">&#123;</span>
-           window<span class="token punctuation">.</span>rootViewController <span class="token operator">=</span> <span class="token function">UIHostingController</span><span class="token punctuation">(</span>rootView<span class="token operator">:</span> <span class="token function">HomePageView</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">func</span> <span class="token function-definition function">goToHome</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token keyword">let</span> window <span class="token operator">=</span> <span class="token class-name">UIApplication</span><span class="token punctuation">.</span>shared<span class="token punctuation">.</span>windows<span class="token punctuation">.</span>first<span class="token punctuation">&#123;</span>
+           window<span class="token punctuation">.</span>rootViewController <span class="token operator">=</span> <span class="token class-name">UIHostingController</span><span class="token punctuation">(</span>rootView<span class="token punctuation">:</span> <span class="token class-name">HomePageView</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
            window<span class="token punctuation">.</span><span class="token function">makeKeyAndVisible</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
         <span class="token punctuation">&#125;</span>
-       <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 
-struct ContentView_Previews<span class="token operator">:</span> PreviewProvider <span class="token punctuation">&#123;</span>
-  static <span class="token keyword">var</span> previews<span class="token operator">:</span> some View <span class="token punctuation">&#123;</span>
-      <span class="token function">ContentView</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h4 id="3-2-login-framework-分析"><a href="#3-2-login-framework-分析" class="headerlink" title="3.2  login.framework 分析"></a>3.2  login.framework 分析</h4><ul>
 <li>我们在login module commonMain下的LoginService 中 分别声明了 3个函数方法：</li>
@@ -887,30 +881,29 @@ struct ContentView_Previews<span class="token operator">:</span> PreviewProvider
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/blogs/2022/06/08/kotlin-multiplatform-mobile-ji-chu-ru-men-er/">
+                <a href="/blogs/2022/06/09/kotlin-multiplatform-mobile-ji-chu-ru-men-san/">
                     <div class="card-image">
                         
                         
-                        <img src="/blogs/medias/featureimages/1.jpg" class="responsive-img" alt="Kotlin Multiplatform Mobile基础入门(二)">
+                        <img src="/blogs/medias/featureimages/6.jpg" class="responsive-img" alt="Kotlin Multiplatform Mobile基础入门(三)">
                         
-                        <span class="card-title">Kotlin Multiplatform Mobile基础入门(二)</span>
+                        <span class="card-title">Kotlin Multiplatform Mobile基础入门(三)</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            通过Kotlin Multiplatform Mobile 搭建的一个简单的登录示例工程，旨在了解KMM开发流程
+                            通过Kotlin Multiplatform Mobile 搭建的一个简单的登录示例工程，搭配主流开源框架Ktor网络库，SQLDelight数据库，旨在了解KMM开发流程
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-08
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-06-09
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -923,7 +916,6 @@ struct ContentView_Previews<span class="token operator">:</span> PreviewProvider
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -941,6 +933,14 @@ struct ContentView_Previews<span class="token operator">:</span> PreviewProvider
                     
                     <a href="/blogs/tags/iOS/">
                         <span class="chip bg-color">iOS</span>
+                    </a>
+                    
+                    <a href="/blogs/tags/Ktor/">
+                        <span class="chip bg-color">Ktor</span>
+                    </a>
+                    
+                    <a href="/blogs/tags/SQLDelight/">
+                        <span class="chip bg-color">SQLDelight</span>
                     </a>
                     
                 </div>
