@@ -745,7 +745,67 @@
 
 dioHttpClient<span class="token punctuation">.</span><span class="token function">setGlobalErrorHandler</span><span class="token punctuation">(</span>defaultErrorHandler<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
-<h4 id="2-8-网络请求与天气示例"><a href="#2-8-网络请求与天气示例" class="headerlink" title="2.8 网络请求与天气示例"></a>2.8 网络请求与天气示例</h4><ul>
+<h4 id="2-8-dio-拦截器"><a href="#2-8-dio-拦截器" class="headerlink" title="2.8 dio 拦截器"></a>2.8 dio 拦截器</h4><blockquote>
+<p>每个Dio实例都可以添加任意多个拦截器，他们组成一个队列，拦截器队列的执行顺序是FIFO。通过拦截器你可以在请求之前、响应之后和发生异常时(但还没有被 then 或 catchError处理)做一些统一的预处理操做</p>
+</blockquote>
+<ul>
+<li><p>基本用法</p>
+<pre class="line-numbers language-dart" data-language="dart"><code class="language-dart">dio<span class="token punctuation">.</span>interceptors<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">InterceptorsWrapper</span><span class="token punctuation">(</span>
+   onRequest<span class="token punctuation">:</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+      <span class="token comment">// Do something before request is sent</span>
+      <span class="token keyword">return</span> handler<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//continue</span>
+      <span class="token comment">// 如果你想完成请求并返回一些自定义数据，你可以resolve一个Response对象 `handler.resolve(response)`</span>
+      <span class="token comment">// 这样请求将会被终止，上层then会被调用，then中返回的数据将是你的自定义response.</span>
+      <span class="token comment">// 如果你想终止请求并触发一个错误,你可以返回一个`DioError`对象,如`handler.reject(error)`，</span>
+      <span class="token comment">// 这样请求将被中止并触发异常，上层catchError会被调用。</span>
+   <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+   onResponse<span class="token punctuation">:</span><span class="token punctuation">(</span>response<span class="token punctuation">,</span>handler<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">// Do something with response data</span>
+      <span class="token keyword">return</span> handler<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// continue</span>
+      <span class="token comment">// 如果你想终止请求并触发一个错误,你可以 reject 一个`DioError`对象,如`handler.reject(error)`，</span>
+      <span class="token comment">// 这样请求将被中止并触发异常，上层catchError会被调用。</span>
+   <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+   onError<span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token class-name">DioError</span> e<span class="token punctuation">,</span> handler<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">// Do something with response error</span>
+      <span class="token keyword">return</span>  handler<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//continue</span>
+      <span class="token comment">// 如果你想完成请求并返回一些自定义数据，可以resolve 一个`Response`,如`handler.resolve(response)`。</span>
+      <span class="token comment">// 这样请求将会被终止，上层then会被调用，then中返回的数据将是你的自定义response.</span>
+   <span class="token punctuation">&#125;</span>
+<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>自定义拦截器示例</p>
+<pre class="line-numbers language-dart" data-language="dart"><code class="language-dart"><span class="token keyword">class</span> <span class="token class-name">CustomInterceptor</span> <span class="token keyword">implements</span> <span class="token class-name">Interceptor</span> <span class="token punctuation">&#123;</span>
+ 
+   <span class="token metadata function">@override</span>
+   <span class="token keyword">void</span> <span class="token function">onRequest</span><span class="token punctuation">(</span><span class="token class-name">RequestOptions</span> options<span class="token punctuation">,</span> <span class="token class-name">RequestInterceptorHandler</span> handler<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      handler<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span>
+ 
+   <span class="token metadata function">@override</span>
+   <span class="token keyword">void</span> <span class="token function">onResponse</span><span class="token punctuation">(</span><span class="token class-name">Response</span> response<span class="token punctuation">,</span> <span class="token class-name">ResponseInterceptorHandler</span> handler<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">// 修改天气api返回数据结构</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>response<span class="token punctuation">.</span>statusCode <span class="token operator">==</span> <span class="token number">200</span> <span class="token operator">&amp;&amp;</span> response<span class="token punctuation">.</span>realUri <span class="token operator">==</span> <span class="token class-name">Uri</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>API<span class="token punctuation">.</span>weatherApi<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token function">print</span><span class="token punctuation">(</span><span class="token string-literal"><span class="token string">"response.realUri=</span><span class="token interpolation"><span class="token punctuation">$&#123;</span><span class="token expression">response<span class="token punctuation">.</span>realUri</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token class-name">Weather</span> weather <span class="token operator">=</span> <span class="token class-name">Weather</span><span class="token punctuation">.</span><span class="token function">fromJson</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span><span class="token keyword">dynamic</span><span class="token punctuation">></span></span> orgData <span class="token operator">=</span> weather<span class="token punctuation">.</span><span class="token function">toJson</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span><span class="token keyword">dynamic</span><span class="token punctuation">></span></span> newData <span class="token operator">=</span>  <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span><span class="token keyword">dynamic</span><span class="token punctuation">></span></span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+      newData<span class="token punctuation">[</span><span class="token string-literal"><span class="token string">"code"</span></span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">200</span><span class="token punctuation">;</span>
+      newData<span class="token punctuation">[</span><span class="token string-literal"><span class="token string">"message"</span></span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string-literal"><span class="token string">"success"</span></span><span class="token punctuation">;</span>
+      newData<span class="token punctuation">[</span><span class="token string-literal"><span class="token string">"data"</span></span><span class="token punctuation">]</span> <span class="token operator">=</span> orgData<span class="token punctuation">;</span>
+      response<span class="token punctuation">.</span>data <span class="token operator">=</span> newData<span class="token punctuation">;</span>
+      <span class="token keyword">return</span> handler<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+      <span class="token comment">// continue ,将修改后的response 传递给后面的拦截器</span>
+      handler<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span>
+ 
+   <span class="token metadata function">@override</span>
+   <span class="token keyword">void</span> <span class="token function">onError</span><span class="token punctuation">(</span><span class="token class-name">DioError</span> err<span class="token punctuation">,</span> <span class="token class-name">ErrorInterceptorHandler</span> handler<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+       handler<span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<h4 id="2-9-网络请求与天气示例"><a href="#2-9-网络请求与天气示例" class="headerlink" title="2.9 网络请求与天气示例"></a>2.9 网络请求与天气示例</h4><ul>
 <li><p>ui效果 </p>
 <img src="/blogs/images/flutter_simple_weather.jpg" class="[天气]" width="320" height="380" title="[天气]">
 </li>
