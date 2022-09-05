@@ -426,7 +426,13 @@
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
 <li><p>step5 ： 断开连接</p>
-<pre class="line-numbers language-dart" data-language="dart"><code class="language-dart">httpClient<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<pre class="line-numbers language-dart" data-language="dart"><code class="language-dart">httpClient<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>完整的调用链：</p>
+<blockquote>
+<p>HttpClient.getUrl() —-&gt; _HttpClient_openUrl() —-&gt;_HttpClient_getConnection() —-&gt;_HttpClient_getConnectionTarget().connect()—-&gt;Socket.startConnect() —&gt; establish _HttpClientConnection()</p>
+</blockquote>
+</li>
 </ul>
 <h4 id="1-2-HttpClient网络请求封装"><a href="#1-2-HttpClient网络请求封装" class="headerlink" title="1.2 HttpClient网络请求封装"></a>1.2 HttpClient网络请求封装</h4><ul>
 <li>完整示例<pre class="line-numbers language-dart" data-language="dart"><code class="language-dart"><span class="token keyword">import</span> <span class="token string-literal"><span class="token string">'dart:convert'</span></span><span class="token punctuation">;</span>
